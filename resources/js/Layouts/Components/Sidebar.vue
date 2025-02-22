@@ -91,7 +91,7 @@
       icon: '/icons/data.png',
       submenu: [
         { name: 'Ver Usuarios', routeName: 'users.index' },
-        { name: 'Crear Usuario', routeName: 'users.create' },
+        /* { name: 'Crear Usuario', routeName: 'users.create' }, */
       ],
       role:isAdmin,
     },
