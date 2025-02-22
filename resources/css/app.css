@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* custom toast */
+.warning-toast {
+    background-color: #FFD453; /* Color de fondo */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 8px;
+    width: auto !important;
+    min-width: 0;
+    min-height: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  /* custom toast error */
+  .error-toast {
+    background-color: #FF453A; /* Color de fondo */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 8px;
+    width: auto !important;
+    min-width: 0;
+    min-height: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  /* Estilos para el cuerpo del toast */
+  .warning-toast-body {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 110%;
+    color:#333;
+    white-space: nowrap;
+  }
+
+  .bh-datatable .bh-table-responsive {
+    @apply min-h-[80px];
+}
