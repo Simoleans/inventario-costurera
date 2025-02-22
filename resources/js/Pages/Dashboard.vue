@@ -1,5 +1,5 @@
 <template>
-    <AppLayout title="Costureros">
+    <AppLayout title="Inventario">
       <!-- Aquí es donde agregas tu componente Section.vue -->
       <Section
         width="100%"
@@ -12,7 +12,7 @@
         </template>
 
         <template #content>
-          <p>Costurero.</p>
+          <p>Costurero inventario.</p>
         </template>
       </Section>
 

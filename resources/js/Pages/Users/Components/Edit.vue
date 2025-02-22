@@ -1,4 +1,9 @@
 <template>
+    <div
+      v-if="open"
+      class="fixed z-[699] bg-[#00000080] top-0 left-0 h-screen w-screen"
+      @click="handleClose"
+    ></div>
     <transition>
       <div
         v-if="open"
@@ -32,21 +37,36 @@
               </div>
 
               <div>
-                <label for="passport" class="block text-sm font-medium text-gray-700">Pasaporte</label>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                 <input
-                  type="text"
-                  id="passport"
-                  v-model="formData.passport"
+                  type="email"
+                  id="email"
+                  v-model="formData.email"
                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
-                <small class="font-semibold text-red-500">{{ formData.errors.passport }}</small>
+                <small class="font-semibold text-red-500">{{ formData.errors.email }}</small>
               </div>
+              <div>
+                <label for="role_id" class="block text-sm font-medium text-gray-700">Rol</label>
+                <select
+                  id="role_id"
+                  required
+                  v-model="formData.role_id"
+                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="1">Administrador</option>
+                  <option value="2">Almacenista - Entrada</option>
+                  <option value="3">Almacenista - Salida</option>
+                </select>
+              </div>
+
+
             </form>
           </div>
         </div>
         <!-- Botones Guardar y Cancelar -->
         <div
-          class="tertiary-black-200 py-4 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-white w-full"
+          class="tertiary-black-200 py-4 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-gray-100 w-full"
           style="height: 72px;"
         >
           <button class="underline font-medium text-red-500" @click="handleClose">
@@ -86,13 +106,15 @@
   const formData = useForm({
     id: props.data.id,
     name: props.data.name,
-    passport: props.data.passport,
+    email: props.data.email,
+    role_id: props.data.role_id,
   });
 
   watch(() => props.data, (newVal) => {
     formData.id = newVal.id;
     formData.name = newVal.name;
-    formData.passport = newVal.passport;
+    formData.email = newVal.email;
+    formData.role_id = newVal.role_id;
   });
 
   let formInitialized = reactive({});
@@ -100,7 +122,7 @@
 
   // Computed para verificar si el formulario es válido
   const isFormValid = computed(() => {
-    return formData.name !== '' && formData.passport !== ''; // Verifica si ambos campos no están vacíos
+    return formData.name !== '' && formData.email !== '' && formData.role_id !== ''; // Verifica si ambos campos no están vacíos
   });
 
   // Función para inicializar el formulario
@@ -122,7 +144,7 @@
 
   // Guardar el formulario y reiniciar el estado
   const handleSave = () => {
-    formData.put(route('employe.update', formData.id), {
+    formData.put(route('users.update', formData.id), {
       preserveScroll: true,
       onSuccess: () => {
         closeModal();
@@ -146,8 +168,7 @@
   // Función para cerrar el formulario
   const closeModal = () => {
     emit('close');
-    formData.name = '';
-    formData.passport = '';
+    formData.reset();
   };
 
   // Controlar la altura del contenedor

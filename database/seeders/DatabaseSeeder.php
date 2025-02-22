@@ -19,10 +19,7 @@ class DatabaseSeeder extends Seeder
 
 
         $this->call([
-            EmployesSeeder::class,
-            CategorySeeder::class,
             RoleSeeder::class,
-            ItemSeeder::class,
         ]);
 
         User::factory()->create([

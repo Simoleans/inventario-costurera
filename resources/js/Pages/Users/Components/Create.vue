@@ -1,4 +1,9 @@
 <template>
+    <div
+      v-if="open"
+      class="fixed z-[699] bg-[#00000080] top-0 left-0 h-screen w-screen"
+      @click="handleClose"
+    ></div>
     <transition>
       <div
         v-if="open"
@@ -31,21 +36,58 @@
               </div>
 
               <div>
-                <label for="passport" class="block text-sm font-medium text-gray-700">Pasaporte</label>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                 <input
-                  type="text"
-                  id="passport"
+                  type="email"
+                  id="email"
                   required
-                  v-model="formData.passport"
+                  v-model="formData.email"
                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </div>
+              <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                <input
+                  type="password"
+                  id="password"
+                  required
+                  v-model="formData.password"
+                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <!-- repetir clave-->
+              <div>
+                <label for="password_confirmation" class="block text-sm font-medium text-gray-700" :class="{'text-red-500': formData.password !== formData.password_confirmation}">Repetir Contraseña</label>
+                <input
+                  type="password"
+                  id="password_confirmation"
+                  :class="{'border-red-500': formData.password !== formData.password_confirmation}"
+                  required
+                  v-model="formData.password_confirmation"
+                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label for="role_id" class="block text-sm font-medium text-gray-700">Rol</label>
+                <select
+                  id="role_id"
+                  required
+                  v-model="formData.role_id"
+                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="1">Administrador</option>
+                  <option value="2">Almacenista - Entrada</option>
+                  <option value="3">Almacenista - Salida</option>
+                </select>
+              </div>
+
             </form>
           </div>
         </div>
+        <hr>
         <!-- Botones Guardar y Cancelar -->
         <div
-          class="tertiary-black-200 py-4 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-white w-full"
+          class="tertiary-black-200 py-4 px-6 flex items-center justify-between border-t border-gray z-[1000] bg-gray-100 w-full"
           style="height: 72px;"
         >
           <button class="underline font-medium text-red-500" @click="handleClose">
@@ -80,7 +122,10 @@
   // Datos del formulario y estado inicial
   const formData = useForm({
     name: '',
-    passport: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    role_id: '',
   });
 
   let formInitialized = reactive({});
@@ -88,7 +133,12 @@
 
   // Computed para verificar si el formulario es válido
   const isFormValid = computed(() => {
-    return formData.name.trim() !== '' && formData.passport.trim() !== ''; // Verifica si ambos campos no están vacíos
+    return formData.name.trim() !== '' &&
+     formData.email.trim() !== '' &&
+     formData.password.trim() !== '' &&
+     formData.password_confirmation.trim() !== '' &&
+     formData.password === formData.password_confirmation &&
+      formData.role_id.trim() !== ''; // Verifica si ambos campos no están vacíos
   });
 
   // Función para inicializar el formulario
@@ -110,7 +160,7 @@
 
   // Guardar el formulario y reiniciar el estado
   const handleSave = () => {
-    formData.post(route('employe.store'), {
+    formData.post(route('users.store'), {
       preserveScroll: true,
       onSuccess: () => {
         closeModal();
@@ -134,8 +184,7 @@
   // Función para cerrar el formulario
   const closeModal = () => {
     emit('close');
-    formData.name = '';
-    formData.passport = '';
+    formData.reset();
   };
 
   // Controlar la altura del contenedor

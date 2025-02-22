@@ -31,7 +31,7 @@
                 </div>
                 <!-- Tabla -->
                 <vue3-datatable
-                    :rows="props.employes"
+                    :rows="props.users"
                     :columns="cols"
                     :loading="loading"
                     :totalRows="total_rows"
@@ -50,7 +50,7 @@
                                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                                 </svg>
                             </button>
-                            <button type="button" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded inline-flex items-center transition duration-300 ease-in-out" @click="deleteData(data.value)">
+                            <button type="button" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded inline-flex items-center transition duration-300 ease-in-out" @click="deleteData(data.value)" v-show="$page.props.auth.user.id != data.value.id || $page.props.auth.user.role_id != 1">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                                     <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
@@ -68,25 +68,20 @@
 
         <Modal :show="isOpenDelete" @close="closeModalDelete">
             <div class="p-6">
-                <h2 v-if="employe.del == 1" class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    ¿Estás seguro de que deseas eliminar a {{ employe.name }}?
-                </h2>
-                <h2 v-else class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    No se puede eliminar este costurero
+                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                    ¿Estás seguro de que deseas eliminar a {{ user.name }}?
                 </h2>
 
-                <p v-if="employe.del == 1" class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Una vez que se elimine el costurero, todos sus recursos y datos se eliminarán de forma permanente.
+
+                <p  class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                    Una vez que se elimine el usuario, todos sus recursos y datos se eliminarán de forma permanente.
                 </p>
-                <p v-else class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Este costurero ya tiene datos asociados, no se puede eliminar.
-                </p>
+
                 <div class="mt-6 flex justify-end gap-4">
                     <button class="underline font-medium text-red-500" @click="closeModalDelete"> Cancel </button>
                     <button
                         class="bg-red-500 hover:bg-red-600 text-white font-medium rounded-[6px] px-4 py-2 disabled:opacity-50"
                         type="submit"
-                        :disabled="employe.del == 0"
                         @click="handleDeleteData"
                     >
                         Eliminar
@@ -111,7 +106,7 @@ import { useForm } from '@inertiajs/vue3';
 import { useToastAlert } from '@/Composables/useToastAlert';
 
 const props = defineProps({
-    employes: {
+    users: {
         type: Array,
         required: true,
     },
@@ -141,7 +136,7 @@ const form = useForm({
     id: '',
 });
 
-const employe = ref({
+const user = ref({
     name : '',
     del : false,
 })
@@ -171,8 +166,7 @@ const editData = (data) => {
 
 const deleteData = (data) => {
     form.id = data.id;
-    employe.value.name = data.name;
-    employe.value.del = data.del
+    user.value.name = data.name;
     isOpenDelete.value = true;
 };
 
@@ -181,7 +175,7 @@ const closeModalDelete = () => {
 };
 
 const handleDeleteData = () => {
-    form.put(route('employe.updateStatus', form.id), {
+    form.put(route('users.updateStatus', form.id), {
         preserveScroll: true,
         onSuccess: () => {
             closeModalDelete();

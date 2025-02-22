@@ -16,6 +16,7 @@ return new class extends Migration
             //unisgnedBigInteger
             $table->unsignedBigInteger('role_id')->after('id')->nullable();
             $table->foreign('role_id')->references('id')->on('roles');
+            $table->boolean('status')->default(true)->after('role_id');
         });
     }
 

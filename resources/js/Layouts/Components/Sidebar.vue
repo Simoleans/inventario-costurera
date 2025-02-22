@@ -87,6 +87,15 @@
       routeName: 'dashboard',
     },
     {
+      name: 'Usuarios',
+      icon: '/icons/data.png',
+      submenu: [
+        { name: 'Ver Usuarios', routeName: 'users.index' },
+        { name: 'Crear Usuario', routeName: 'users.create' },
+      ],
+      role:isAdmin,
+    },
+    /*{
       name: 'Bitácora',
       icon: '/icons/data.png',
       submenu: [
@@ -99,13 +108,12 @@
       name: 'Configuración',
       icon: '/icons/configuraciones.png',
       submenu: [
-        /* { name: 'Categorías', routeName: 'category.index' }, */
         { name: 'Costureros', routeName: 'employe.index' },
         { name: 'Items', routeName: 'items.index' },
         { name: 'Clientes', routeName: 'customer.index' },
       ],
-      role: isAdmin, // Sólo visible si el usuario es admin
-    },
+      role: isAdmin,
+    },*/
   ]);
 
   // Filtrar los items visibles según el rol del usuario
